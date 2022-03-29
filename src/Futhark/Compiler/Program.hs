@@ -131,12 +131,15 @@ contentsAndModTime filepath =
   interactWithFileSafely $
     (,) <$> T.readFile filepath <*> getModificationTime filepath
 
+-- take another prarams
 readImportFile :: ImportName -> IO (Either ProgramError (LoadedFile T.Text))
 readImportFile include = do
   -- First we try to find a file of the given name in the search path,
   -- then we look at the builtin library if we have to.  For the
   -- builtins, we don't use the search path.
   let filepath = includeToFilePath include
+  -- check if in VFS (abs path)
+  -- if so return
   r <- contentsAndModTime filepath
   case (r, lookup prelude_str prelude) of
     (Just (Right (s, mod_time)), _) ->
